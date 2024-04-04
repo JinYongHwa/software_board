@@ -1,0 +1,70 @@
+<template>
+    <div class="board">
+        <div class="title">{{ board.title }}</div>
+        <div class="writer">{{ board.writer }}</div>
+        <div class="write-date">{{ board.writeDate }}</div>
+        <div class="content">{{ board.content }}</div>
+        <v-layout>
+            <v-btn color="primary" @click="moveList">목록</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn color="primary">수정</v-btn>
+            <v-btn color="red">삭제</v-btn>
+        </v-layout>
+    </div>
+</template>
+<script>
+export default {
+    data() {
+        return {
+            board: {
+                title: "",
+                writer: "",
+                writeDate: "",
+                content: ""
+            }
+        }
+    },
+    mounted() {
+        var no = this.$route.params.id;
+        this.$axios.get("/board/" + no)
+            .then(response => {
+                this.board = response.data;
+            })
+
+    },
+    methods: {
+        moveList() {
+            this.$router.push("/")
+        }
+    }
+}
+</script>
+<style scoped lang="less">
+.board {
+    width: 800px;
+    max-width: 100%;
+    margin: 0 auto;
+    background: #eee;
+
+    .title {
+        font-size: 24px;
+        font-weight: bold;
+        padding: 20px 0;
+    }
+
+    .writer {
+        font-size: 18px;
+        text-align: right;
+    }
+
+    .write-date {
+        font-size: 14px;
+        text-align: right;
+    }
+
+    .content {
+        padding: 20px 0;
+        min-height: 300px;
+    }
+}
+</style>
