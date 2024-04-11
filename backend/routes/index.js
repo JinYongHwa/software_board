@@ -12,6 +12,36 @@ router.get("/board/:no", async function (req, res) {
   var board = await sequelize.models.board.findByPk(no)
   res.json(board)
 })
+router.post("/board/list", async function (req, res) {
+  var page = req.body.page || 1
+  var offset = (page - 1) * 10
+  var boardList = await sequelize.models.board.findAll({
+    limit: 10,
+    offset: offset,
+    order: [["writeDate", "DESC"], ["no", "DESC"]]
+  })
+  var totalCount = await sequelize.models.board.count()
+  console.log(totalCount)
+  var totalPage = Math.ceil(totalCount / 10)
+  console.log(totalPage)
+
+  res.json({
+    boardList: boardList,
+    totalPage: totalPage
+  })
+})
+
+router.delete("/board/:no", async function (req, res) {
+  var no = req.params.no
+  await sequelize.models.board.destroy({
+    where: {
+      no: no
+    }
+  })
+  res.json({
+    result: "success"
+  })
+})
 
 
 module.exports = router;

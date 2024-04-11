@@ -3,6 +3,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import list from "@/views/list.vue"
 import write from "@/views/write.vue"
 import view from "@/views/view.vue"
+import modify from "@/views/modify.vue"
 
 const routes = [
   {
@@ -16,6 +17,10 @@ const routes = [
   {
     path: "/view/:id",
     component: view
+  },
+  {
+    path: "/modify/:id",
+    component: modify
   }
 ]
 

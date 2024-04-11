@@ -7,8 +7,8 @@
         <v-layout>
             <v-btn color="primary" @click="moveList">목록</v-btn>
             <v-spacer></v-spacer>
-            <v-btn color="primary">수정</v-btn>
-            <v-btn color="red">삭제</v-btn>
+            <v-btn color="primary" @click="moveModify">수정</v-btn>
+            <v-btn color="red" @click="removeBoard">삭제</v-btn>
         </v-layout>
     </div>
 </template>
@@ -33,6 +33,19 @@ export default {
 
     },
     methods: {
+        moveModify() {
+            this.$router.push("/modify/" + this.$route.params.id)
+        },
+        removeBoard() {
+            this.$axios.delete("/board/" + this.$route.params.id)
+                .then(response => {
+                    if (response.data.result == "success") {
+                        alert("삭제되었습니다.")
+                        this.$router.push("/")
+                    }
+                })
+
+        },
         moveList() {
             this.$router.push("/")
         }

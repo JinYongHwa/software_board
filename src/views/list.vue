@@ -19,10 +19,12 @@
                     <td>{{ board.title }}</td>
                     <td>{{ board.viewCount }}</td>
                     <td>{{ board.writer }}</td>
-                    <td>{{ board.writeDate }}</td>
+                    <td>{{ formattedWriteDate(board.writeDate) }}</td>
                 </tr>
             </tbody>
         </table>
+
+        <v-pagination :length="totalPage" @update:modelValue="updatePage"></v-pagination>
 
         <div class="text-right">
             <v-btn color="primary" variant="outlined" @click="moveWrite">글쓰기</v-btn>
@@ -30,67 +32,14 @@
     </div>
 </template>
 <script>
+import moment from "moment"
+
 export default {
     data() {
         return { //변수를 선언하는 영역
-            name: "홍길동",
-            age: 20,
-            arr: [
-                { name: "홍길동", age: 18 },
-                { name: "김철수", age: 25 },
-                { name: "이영희", age: 30 }
-            ],
-            boardList: [
-                {
-                    no: 1,
-                    title: "asdfasdf",
-                    viewCount: 102,
-                    writer: "진용화",
-                    writeDate: "2021-01-01"
-                },
-                {
-                    no: 2,
-                    title: "제목1",
-                    viewCount: 100,
-                    writer: "홍길동",
-                    writeDate: "2021-01-01"
-                },
-                {
-                    no: 1,
-                    title: "제목1",
-                    viewCount: 100,
-                    writer: "홍길동",
-                    writeDate: "2021-01-01"
-                },
-                {
-                    no: 1,
-                    title: "제목1",
-                    viewCount: 100,
-                    writer: "홍길동",
-                    writeDate: "2021-01-01"
-                },
-                {
-                    no: 1,
-                    title: "제목1",
-                    viewCount: 100,
-                    writer: "홍길동",
-                    writeDate: "2021-01-01"
-                },
-                {
-                    no: 1,
-                    title: "제목1",
-                    viewCount: 100,
-                    writer: "홍길동",
-                    writeDate: "2021-01-01"
-                },
-                {
-                    no: 1,
-                    title: "제목1",
-                    viewCount: 100,
-                    writer: "홍길동",
-                    writeDate: "2021-01-01"
-                },
-            ]
+            page: 1,
+            totalPage: 0,
+            boardList: []
         }
     },
     computed: {
@@ -102,7 +51,27 @@ export default {
             return sum;
         }
     },
+    mounted() {
+        this.getBoardList();
+    },
     methods: {
+        formattedWriteDate(date) {
+            return moment(date).format("YYYY-MM-DD HH:mm:ss")
+        },
+
+        updatePage(page) {
+            console.log(page)
+            this.page = page
+            this.getBoardList()
+        },
+        getBoardList() {
+            this.$axios.post("/board/list", { page: this.page })
+                .then((response) => {
+                    this.boardList = response.data.boardList;
+                    this.totalPage = response.data.totalPage;
+                })
+        },
+
         addPerson() {
             this.arr.push({
                 name: this.name,
