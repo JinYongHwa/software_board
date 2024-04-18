@@ -10,6 +10,8 @@ router.post("/board/write", async function (req, res) {
 router.get("/board/:no", async function (req, res) {
   var no = req.params.no
   var board = await sequelize.models.board.findByPk(no)
+  board.viewCount++
+  await board.save()
   res.json(board)
 })
 router.post("/board/list", async function (req, res) {
@@ -36,6 +38,21 @@ router.delete("/board/:no", async function (req, res) {
   await sequelize.models.board.destroy({
     where: {
       no: no
+    }
+  })
+  res.json({
+    result: "success"
+  })
+})
+router.post("/board/modify", async function (req, res) {
+  console.log(req.body)
+  await sequelize.models.board.update({
+    title: req.body.title,
+    content: req.body.content,
+    writer: req.body.writer
+  }, {
+    where: {
+      no: req.body.no
     }
   })
   res.json({

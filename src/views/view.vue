@@ -2,7 +2,8 @@
     <div class="board">
         <div class="title">{{ board.title }}</div>
         <div class="writer">{{ board.writer }}</div>
-        <div class="write-date">{{ board.writeDate }}</div>
+        <div class="write-date">{{ formattedDate(board.writeDate) }}</div>
+        <div class="view-count">조회수 : {{ board.viewCount }}</div>
         <div class="content">{{ board.content }}</div>
         <v-layout>
             <v-btn color="primary" @click="moveList">목록</v-btn>
@@ -13,6 +14,7 @@
     </div>
 </template>
 <script>
+import moment from "moment";
 export default {
     data() {
         return {
@@ -33,6 +35,9 @@ export default {
 
     },
     methods: {
+        formattedDate(date) {
+            return moment(date).format("YYYY-MM-DD HH:mm:ss")
+        },
         moveModify() {
             this.$router.push("/modify/" + this.$route.params.id)
         },
