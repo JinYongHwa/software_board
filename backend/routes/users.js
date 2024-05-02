@@ -40,11 +40,36 @@ router.post("/login", async function (req, res) {
     return
   }
   //TODO : 세션에 로그인 정보 저장
+  req.session.user = checkUser
 
   res.json({
-    result: "success"
+    result: "success",
+    user: checkUser
   })
 
 })
+
+router.post("/info", async function (req, res) {
+  if (req.session.user) { //세션에 사용자정보가 있을때 -> 로그인 상태
+    res.json({
+      result: "success",
+      user: req.session.user
+    })
+  }
+  else { //세션에 사용자정보가 없을때 -> 로그아웃 상태
+    res.json({
+      result: "fail"
+    })
+  }
+})
+router.post("/logout", async function (req, res) {
+  req.session.destroy()
+  res.json({
+    result: "success"
+  })
+})
+
+
+
 
 module.exports = router;

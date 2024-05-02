@@ -15,6 +15,7 @@ router.get("/board/:no", async function (req, res) {
   res.json(board)
 })
 router.post("/board/list", async function (req, res) {
+  console.log(req.session)
   var page = req.body.page || 1
   var offset = (page - 1) * 10
   var boardList = await sequelize.models.board.findAll({
